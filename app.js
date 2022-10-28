@@ -142,7 +142,7 @@ if (modeCluster == "cluster" && cluster.isMaster) {
   });
 
   server.listen(PORT, () => {
-    console.log("Running..." + PORT);
+    console.log("Running..." + PORT, " pid: " + process.pid);
   });
 }
 
