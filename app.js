@@ -21,7 +21,7 @@ import multer from "multer";
 
 dotenv.config();
 console.log("hola", parseArgv(process.argv));
-const PORT = parseArgv(process.argv).port || 8080;
+//const PORT = parseArgv(process.argv).port || 8080;
 
 // lo puedes correr con --> node app.js 7000
 const modeCluster = parseArgv(process.argv).modo || "fork";
@@ -141,6 +141,7 @@ if (modeCluster == "cluster" && cluster.isMaster) {
     });
   });
 
+  let PORT = process.env.PORT || 8080;
   server.listen(PORT, () => {
     console.log("Running..." + PORT, " pid: " + process.pid);
   });
