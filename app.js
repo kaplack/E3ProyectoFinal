@@ -12,15 +12,16 @@ import session from "express-session";
 import cookieParser from "cookie-parser";
 import MongoStore from "connect-mongo";
 import ContenedorUser from "./classes/ContenedorUser.js";
-import bcryptjs from "bcryptjs";
 import parseArgv from "minimist";
 import * as dotenv from "dotenv";
 import routerRandom from "./router/random.router.js";
 import os from "os";
-import multer from "multer";
+import log4js from "log4js";
 
 dotenv.config();
-console.log("hola", parseArgv(process.argv));
+const logger = log4js.getLogger();
+logger.level = process.env.LOGGER_MODE;
+//console.log("hola", parseArgv(process.argv));
 //const PORT = parseArgv(process.argv).port || 8080;
 
 // lo puedes correr con --> node app.js 7000
@@ -120,7 +121,7 @@ if (modeCluster == "cluster" && cluster.isMaster) {
     });
   });
 
-  app.use("/cart", routerCart);
+  app.use("/api/cart", routerCart);
 
   io.on("connection", (socket) => {
     console.log("Somebody connected!");
@@ -143,7 +144,7 @@ if (modeCluster == "cluster" && cluster.isMaster) {
 
   let PORT = process.env.PORT || 8080;
   server.listen(PORT, () => {
-    console.log("Running..." + PORT, " pid: " + process.pid);
+    logger.info("Running..." + PORT, " pid: " + process.pid);
   });
 }
 

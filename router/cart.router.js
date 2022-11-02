@@ -1,4 +1,5 @@
 import multer from "multer";
+import Products from "../classes/products.js";
 import ContenedorUser from "../classes/ContenedorUser.js";
 import ContenedorCart from "../classes/ContenedorCart.js";
 import { createTransport } from "nodemailer";
@@ -6,6 +7,7 @@ import twilio from "twilio";
 
 import { Router } from "express";
 
+const data = new Products();
 const users = new ContenedorUser();
 const carts = new ContenedorCart();
 
@@ -14,9 +16,24 @@ const routerCart = Router();
 routerCart.get("/", async (req, res) => {
   let cartData = await carts.read();
 
-  console.log(userCart);
+  let userID = req.session.currentUserID;
+  // let usersData = await users.read();
+  // let currUser = usersData.filter((u) => u.username == user);
+  carts.read().then((cart) => {
+    let carrito = cart.filter((c) => c.userID == userID);
+    res.render("cart", {
+      carrito,
+      user: req.session.currentUser,
+    });
+  });
+  // data.getAll().then((items) => {
 
-  res.send(cartData);
+  //   res.render("cart", {
+  //     products: items,
+  //     user: currUser[0],
+  //   });
+  // });
+  //res.send(cartData);
 });
 
 const upload = multer();
@@ -24,13 +41,15 @@ routerCart.post("/", upload.none(), async (req, res) => {
   let cartItem = {
     timeStamp: Date.now(),
     userID: req.body.userID,
-    items: req.body.items,
+    items: [req.body.productID],
   };
 
   const newCart = carts.save(cartItem);
 
   let usersData = await users.read();
+  console.log(usersData);
   let userCart = usersData.filter((uc) => uc._id == req.body.userID);
+  console.log("currentUsr", userCart);
 
   //mail config
   const mail = process.env.CORREO_ADM;

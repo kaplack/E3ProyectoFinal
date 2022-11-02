@@ -2,7 +2,16 @@
 <html lang="en">
   <%- include('./partials/head.ejs'); %>
   <body>
-    <%- include('./partials/header.ejs'); %> <%-
-    include('./partials/footer.ejs'); %>
+    <%- include('./partials/header.ejs'); %>
+    <section>
+      <div class="cart">
+        <h1 class="cart__title">Carrito de Compras</h1>
+        <div class="cart__content">
+          <div class="cart__content--items"><%= carrito %></div>
+          <div class="cart__content--bill">Bill</div>
+        </div>
+      </div>
+    </section>
+    <%- include('./partials/footer.ejs'); %>
   </body>
 </html>

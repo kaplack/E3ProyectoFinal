@@ -16,10 +16,21 @@
               <img src="<%= el.thumbnail %>" />
             </div>
 
-            <!-- <form action="carrito" id="addForm" method="post">
-              <input type="number" name="id" value="<%= el.id %>" hidden />
+            <form action="cart" id="addForm" method="post">
+              <input
+                type="string"
+                name="productID"
+                value="<%= el.id %>"
+                hidden
+              />
+              <input
+                type="string"
+                name="userID"
+                value="<%= el.userID %>"
+                hidden
+              />
               <input type="submit" value="Comprar" />
-            </form> -->
+            </form>
           </li>
           <% }) %>
         </ul>

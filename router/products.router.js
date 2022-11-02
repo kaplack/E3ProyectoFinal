@@ -3,11 +3,13 @@ import session from "express-session";
 import multer from "multer";
 import Products from "../classes/products.js";
 import ContenedorUser from "../classes/ContenedorUser.js";
+import ContenedorProducts from "../classes/ContenedorProducts.js";
 import path from "path";
 
 import { Router } from "express";
 
-const data = new Products();
+//const data = new Products();
+const data = new ContenedorProducts();
 const users = new ContenedorUser();
 const routerProduct = Router();
 
@@ -16,7 +18,7 @@ routerProduct.get("/", async (req, res) => {
   let user = req.session.currentUser;
   let usersData = await users.read();
   let currUser = usersData.filter((u) => u.username == user);
-  data.getAll().then((items) => {
+  data.read().then((items) => {
     res.render("productos", {
       products: items,
       listExists: true,
@@ -26,7 +28,7 @@ routerProduct.get("/", async (req, res) => {
 });
 routerProduct.get("/:id", (req, res) => {
   let itemId = req.params.id;
-  data.getById(itemId).then((item) => {
+  data.find({ id: itemId }).then((item) => {
     res.send(item);
   });
 });
@@ -51,11 +53,12 @@ routerProduct.post("/", upload.single("myFile"), (req, res, next) => {
   }
 
   let item = {
+    timeStamp: Date.now(),
     name: req.body.title,
+    userID: req.session.currentUserID,
     price: req.body.price,
     description: req.body.description,
     stock: req.body.stock,
-    code: req.body.code,
     thumbnail: file.path,
   };
   data
